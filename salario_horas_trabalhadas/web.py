@@ -1,4 +1,5 @@
 import streamlit as st
+import streamlit.components.v1 as components
 import datetime
 import holidays
 
@@ -46,11 +47,27 @@ def calcular_salario_com_valor_fixo(horas_trabalhadas, taxa_horaria, valor_fixo,
     return salario
 
 def main():
+    st.markdown(
+    f"""
+    <style>
+    .stApp {{
+        background: linear-gradient(100deg, #000000, #154360);
+        background-attachment: fixed;
+        background-size: cover;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        color: white;
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True
+    )
+    
     st.title("Calculadora de Salário Mensal")
 
     mes = st.number_input("Digite o número do mês (1-12):", min_value=1, max_value=12, value=1)
     ano = st.number_input("Digite o ano:", min_value=1900, max_value=2100, value=2023)
-    metodo_calculo = st.selectbox("Escolha o método de cálculo:", ["Por Hora", "Valor Fixo"])
+    metodo_calculo = st.selectbox("Escolha o tipo:", ["Por Hora", "Valor Fixo"])
     
     if metodo_calculo == "Por Hora":
         taxa_horaria = st.number_input("Digite sua taxa horária:", min_value=0.0, value=23.0)
@@ -77,5 +94,12 @@ def main():
     st.write(f'Poupança e Investimentos: R$ {poupanca_investimento:.2f}')
     st.write(f'Gastos Pessoais: R$ {gastos_pessoais:.2f}')
 
+    icon_link = """
+    <a href="https://github.com/seu_usuario/seu_repositorio" target="_blank">
+        <img src="https://cdn-icons-png.flaticon.com/512/3536/3536505.png" width="30" />
+    </a>
+    """
+    components.html(icon_link, height=40)
+    
 if __name__ == "__main__":
     main()
