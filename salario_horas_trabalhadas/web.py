@@ -95,7 +95,7 @@ def main():
     st.write(f'Gastos Pessoais: R$ {gastos_pessoais:.2f}')
 
     icon_link = """
-    <a href="https://github.com/seu_usuario/seu_repositorio" target="_blank">
+    <a href="https://www.linkedin.com/in/wylliams-d-342906121/" target="_blank">
         <img src="https://cdn-icons-png.flaticon.com/512/3536/3536505.png" width="30" />
     </a>
     """
