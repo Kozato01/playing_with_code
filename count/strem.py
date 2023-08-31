@@ -1,26 +1,31 @@
 import streamlit as st
-
-# Função para ler ou inicializar o contador de acessos
-def get_access_count():
+def viewspages():
     try:
-        with open('access_count.txt', 'r') as f:
-            return int(f.read())
+        with open("counter.txt", "r") as file:
+            count = int(file.read())
     except FileNotFoundError:
-        return 0
-
-# Função para atualizar e exibir o contador de acessos
-def update_access_count():
-    count = get_access_count() + 1
-    with open('access_count.txt', 'w') as f:
-        f.write(str(count))
+        count = 0
+    count += 1
+    with open("counter.txt", "w") as file:
+        file.write(str(count))
     return count
+# Atualiza o contador
+count = viewspages()
+#css
+html_custom = """
+<style>
+.counter-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: -40px;
+    margin-right: -200px;
+    color: green; /* Escolha as cores! */
+}
+</style>
+"""
+st.markdown(html_custom, unsafe_allow_html=True)
+st.markdown(f'<div class="counter-container">Acessos: {count}</div>', unsafe_allow_html=True)
 
-def main():
-    st.title("Contador de Acesso")
-
-    # Atualiza o contador quando a página é acessada
-    access_count = update_access_count()
-    st.write(f"Esta página foi acessada {access_count} vezes.")
-
-if __name__ == '__main__':
-    main()
