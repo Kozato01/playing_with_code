@@ -78,7 +78,7 @@ def main():
     st.title("Calculadora de Salário Mensal")
 
     mes = st.number_input("Digite o número do mês (1-12):", min_value=1, max_value=12, value=datetime.datetime.today().month)
-    ano = st.number_input("Digite o ano:", min_value=1900, max_value=2100, value=2023)
+    ano = st.number_input("Digite o ano:", min_value=1900, max_value=2100, value=datetime.datetime.today().year)
     metodo_calculo = st.selectbox("Escolha o tipo:", ["Por Hora", "Valor Fixo"])
     
     if metodo_calculo == "Por Hora":
