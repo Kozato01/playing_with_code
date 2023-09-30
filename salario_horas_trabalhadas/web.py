@@ -80,34 +80,28 @@ def main():
     if horas_trabalho_mes == 0:
         st.warning("Mês inválido. Verifique o número do mês.")
         return
+        
     imposto_escolha = st.checkbox("Incluir imposto?", value=False)
-    if imposto_escolha:
-        porcentagem = st.number_input("Digite a porcentagem do imposto:", min_value=0, max_value=100, value=6)
+    porcentagem = st.number_input("Digite a porcentagem do imposto:", min_value=0, max_value=100, value=6) if imposto_escolha else 0
 
     DAS_escolha = st.checkbox("Incluir DAS?", value=False)
-    valor_das = 0
-    if DAS_escolha:
-        valor_das = 71 #st.number_input("Valor do DAS:", min_value=0, value=71.0)
+    valor_das = 71 if DAS_escolha else 0
+    #st.number_input("Valor do DAS:", min_value=0, value=71.0) 
 
     salario_mensal = calcular_salario_com_valor_fixo(horas_trabalho_mes, taxa_horaria, valor_fixo, metodo_calculo)
 
-    imposto_calculado = 0
-    if imposto_escolha: 
-        imposto_calculado = (salario_mensal * (porcentagem/100)) + valor_das 
-        salario_liquido = salario_mensal - imposto_calculado
+    imposto_calculado = (salario_mensal * (porcentagem/100)) + valor_das 
+    salario_liquido = salario_mensal - imposto_calculado
 
     st.write("Número de dias úteis de trabalho no mês:", num_dias_uteis)
     st.write("Número de horas de trabalho no mês:", horas_trabalho_mes)
     st.write("Salário mensal bruto estimado: R$", salario_mensal)
     
     salario_final = salario_mensal
-    if imposto_escolha:
+    if imposto_escolha and DAS_escolha:
         st.write("Valor do imposto: R$", imposto_calculado)
         st.write("Salário mensal liquido estimado: R$", salario_liquido)
         salario_final = salario_liquido
-    if DAS_escolha and not imposto_escolha: ### se ela quer imposto E das, entra em cima
-        salario_liquido = salario_mensal - valor_das
-        st.write("Salário mensal liquido estimado: R$", salario_liquido)
 
 # indicações pra galera
     despesas_basicas = salario_final * 0.60
