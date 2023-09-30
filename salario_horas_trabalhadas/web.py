@@ -82,12 +82,10 @@ def main():
         return
     imposto_escolha = st.checkbox("Incluir imposto?", value=False)
     if imposto_escolha:
-        porcentagem = st.slider("Digite a porcentagem do imposto:", min_value=0, max_value=100, value=6)
+        porcentagem = st.number_input("Digite a porcentagem do imposto:", min_value=0, max_value=100, value=6)
 
     salario_mensal = calcular_salario_com_valor_fixo(horas_trabalho_mes, taxa_horaria, valor_fixo, metodo_calculo)
-    despesas_basicas = salario_mensal * 0.60
-    poupanca_investimento = salario_mensal * 0.20
-    gastos_pessoais = salario_mensal * 0.20
+    
     if imposto_escolha: 
         imposto_calculado = salario_mensal * (porcentagem/100)
         salario_liquido = salario_mensal - imposto_calculado
@@ -96,9 +94,17 @@ def main():
     st.write("Número de horas de trabalho no mês:", horas_trabalho_mes)
     st.write("Salário mensal bruto estimado: R$", salario_mensal)
     
+    salario_final = salario_mensal
     if imposto_escolha:
         st.write("Valor do imposto: R$", imposto_calculado)
         st.write("Salário mensal liquido estimado: R$", salario_liquido)
+        salario_final = salario_liquido
+        
+
+# indicações pra galera
+    despesas_basicas = salario_final * 0.60
+    poupanca_investimento = salario_final * 0.20
+    gastos_pessoais = salario_final * 0.20
     
     st.write('-'*15)
     st.write('Recomendação de divisão do salário.')
