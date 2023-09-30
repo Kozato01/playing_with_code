@@ -98,7 +98,7 @@ def main():
     st.write("Salário mensal bruto estimado: R$", salario_mensal)
     
     salario_final = salario_mensal
-    if imposto_escolha and DAS_escolha:
+    if imposto_escolha or DAS_escolha:
         st.write("Valor do imposto: R$", imposto_calculado)
         st.write("Salário mensal liquido estimado: R$", salario_liquido)
         salario_final = salario_liquido
