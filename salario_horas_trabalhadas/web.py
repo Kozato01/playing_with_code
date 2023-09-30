@@ -46,7 +46,7 @@ def calcular_salario_com_valor_fixo(horas_trabalhadas, taxa_horaria, valor_fixo,
 
     return salario
 
-def main():
+def set_app_style():
     st.markdown(
     f"""
     <style>
@@ -62,6 +62,18 @@ def main():
     """,
     unsafe_allow_html=True
     )
+
+def add_linked_in_icon():
+    icon_link = """
+    <a href="https://www.linkedin.com/in/wylliams-d-342906121/" target="_blank">
+        <img src="https://cdn-icons-png.flaticon.com/512/3536/3536505.png" width="30" />
+    </a>
+    """
+    components.html(icon_link, height=40)
+
+
+def main():
+set_app_style()
     
     st.title("Calculadora de Salário Mensal")
 
@@ -114,12 +126,7 @@ def main():
     st.write(f'Poupança e Investimentos: R$ {poupanca_investimento:.2f}')
     st.write(f'Gastos Pessoais: R$ {gastos_pessoais:.2f}')
 
-    icon_link = """
-    <a href="https://www.linkedin.com/in/wylliams-d-342906121/" target="_blank">
-        <img src="https://cdn-icons-png.flaticon.com/512/3536/3536505.png" width="30" />
-    </a>
-    """
-    components.html(icon_link, height=40)
+    add_linked_in_icon()
     
 if __name__ == "__main__":
     main()
