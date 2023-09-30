@@ -87,7 +87,7 @@ def main():
         porcentagem = st.number_input("Digite a porcentagem do imposto:", min_value=0, max_value=100, value=6)
     valor_das = 0
     if DAS_escolha:
-        valor_das = st.number_input("Valor do DAS:", min_value=0, value=71.0)
+        valor_das = 71 #st.number_input("Valor do DAS:", min_value=0, value=71.0)
 
     salario_mensal = calcular_salario_com_valor_fixo(horas_trabalho_mes, taxa_horaria, valor_fixo, metodo_calculo)
 
