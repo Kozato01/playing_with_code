@@ -29,7 +29,7 @@ def calcular_horas_trabalho_mes(mes, ano):
     # Calcula o número total de horas de trabalho no mês
     horas_trabalho_mes = num_dias_uteis * 8
 
-    return horas_trabalho_mes
+    return horas_trabalho_mes, num_dias_uteis
 
 def verificar_feriado(data):
     br_holidays = holidays.Brazil()  # Defina o país desejado
@@ -76,18 +76,30 @@ def main():
         valor_fixo = st.number_input("Digite o valor fixo:", min_value=0.0, value=1500.0)
         taxa_horaria = 0
 
-    horas_trabalho_mes = calcular_horas_trabalho_mes(mes, ano)
+    horas_trabalho_mes, num_dias_uteis = calcular_horas_trabalho_mes(mes, ano)
     if horas_trabalho_mes == 0:
         st.warning("Mês inválido. Verifique o número do mês.")
         return
+    imposto_escolha = st.checkbox("Incluir imposto?", value=False)
+    if imposto_escolha:
+        porcentagem = st.slider("Digite a porcentagem do imposto:", min_value=0, max_value=100, value=6)
 
     salario_mensal = calcular_salario_com_valor_fixo(horas_trabalho_mes, taxa_horaria, valor_fixo, metodo_calculo)
     despesas_basicas = salario_mensal * 0.60
     poupanca_investimento = salario_mensal * 0.20
     gastos_pessoais = salario_mensal * 0.20
+    if imposto_escolha: 
+        imposto_calculado = salario_mensal * (porcentagem/100)
+        salario_liquido = salario_mensal - imposto_calculado
 
+    st.write("Número de dias úteis de trabalho no mês:", num_dias_uteis)
     st.write("Número de horas de trabalho no mês:", horas_trabalho_mes)
-    st.write("Salário mensal estimado: R$", salario_mensal)
+    st.write("Salário mensal bruto estimado: R$", salario_mensal)
+    
+    if imposto_escolha:
+        st.write("Valor do imposto: R$", imposto_calculado)
+        st.write("Salário mensal liquido estimado: R$", salario_liquido)
+    
     st.write('-'*15)
     st.write('Recomendação de divisão do salário.')
     st.write(f'Despesas Básicas: R$ {despesas_basicas:.2f}')
