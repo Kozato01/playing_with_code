@@ -81,12 +81,11 @@ def main():
         st.warning("Mês inválido. Verifique o número do mês.")
         return
     imposto_escolha = st.checkbox("Incluir imposto?", value=False)
-    DAS_escolha = st.checkbox("Incluir DAS?", value=False)
-    
     if imposto_escolha:
         porcentagem = st.number_input("Digite a porcentagem do imposto:", min_value=0, max_value=100, value=6)
-        
-    #valor_das = 0
+
+    DAS_escolha = st.checkbox("Incluir DAS?", value=False)
+    valor_das = 0
     if DAS_escolha:
         valor_das = st.number_input("Valor do DAS:", min_value=0, value=71.0)
 
