@@ -105,9 +105,9 @@ def main():
         st.write("Valor do imposto: R$", imposto_calculado)
         st.write("Salário mensal liquido estimado: R$", salario_liquido)
         salario_final = salario_liquido
-    #if DAS_escolha and not imposto_escolha: ### se ela quer imposto E das, entra em cima
-        #salario_liquido = salario_mensal - valor_das
-        #st.write("Salário mensal liquido estimado: R$", salario_liquido)
+    if DAS_escolha and not imposto_escolha: ### se ela quer imposto E das, entra em cima
+        salario_liquido = salario_mensal - valor_das
+        st.write("Salário mensal liquido estimado: R$", salario_liquido)
 
 # indicações pra galera
     despesas_basicas = salario_final * 0.60
