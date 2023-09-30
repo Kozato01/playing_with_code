@@ -73,7 +73,7 @@ def add_linked_in_icon():
 
 
 def main():
-set_app_style()
+    set_app_style()
     
     st.title("Calculadora de Salário Mensal")
 
