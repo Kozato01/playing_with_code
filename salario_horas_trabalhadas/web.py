@@ -145,8 +145,8 @@ def borda_infinita(gif_url, border_height):
 #Função de execução.
 def main():
     set_app_style()
-    count = viewspages()
-    st.markdown(f'<div class="counter-container">Views: {count}  <img src="https://media2.giphy.com/media/69IXObwFH221tvWgz1/giphy.gif?cid=ecf05e470l46rlrwccrxjo7nfs88hafpud8vvtfqes0lc9iy&ep=v1_gifs_related&rid=giphy.gif&ct=s" width="35"> </div>', unsafe_allow_html=True)
+    #count = viewspages()
+    #st.markdown(f'<div class="counter-container">Views: {count}  <img src="https://media2.giphy.com/media/69IXObwFH221tvWgz1/giphy.gif?cid=ecf05e470l46rlrwccrxjo7nfs88hafpud8vvtfqes0lc9iy&ep=v1_gifs_related&rid=giphy.gif&ct=s" width="35"> </div>', unsafe_allow_html=True)
 
     #Titulo
     st.markdown("# Calculadora de Salário Mensal <img src='https://3.bp.blogspot.com/-KIZ9p-k2cdI/WvRiMSwk7BI/AAAAAAAA7DQ/TXiSbwbbQUQqGROhg5vsi4y7-JdKFBxpgCLcBGAs/s1600/i%2Bbelieve%2Bi%2Bcan%2Bfly%2BI%2BBELIEVE%2BI%2BCAN%2BTOUCH%2BSKY.gif' width='50'>", unsafe_allow_html=True)
