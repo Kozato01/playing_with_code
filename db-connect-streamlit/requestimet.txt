@@ -1,7 +1,0 @@
-streamlit
-psycopg2
-mysql-connector-python
-snowflake-connector-python
-pandas
-matplotlib
-seaborn
