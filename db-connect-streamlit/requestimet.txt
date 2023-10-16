@@ -1,6 +1,7 @@
-mysql-connector-python==8.1.0
-snowflake-connector-python==3.3.0
-psycopg2==2.9.9
-pandas==2.1.1
-matplotlib==3.8.0
-seaborn==0.13.0
+streamlit
+psycopg2
+mysql-connector-python
+snowflake-connector-python
+pandas
+matplotlib
+seaborn
