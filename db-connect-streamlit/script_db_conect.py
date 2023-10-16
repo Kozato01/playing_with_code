@@ -1,5 +1,4 @@
 import streamlit as st
-import psycopg2
 import mysql.connector.connection
 import snowflake.connector
 import pandas as pd
@@ -23,14 +22,14 @@ def connect_to_mysql(host, username, password, database):
     return connection
 
 #PostgreSQL
-def connect_to_postgresql(host, database, username, password):
+"""def connect_to_postgresql(host, database, username, password):
     connection = psycopg2.connect(
         host=host,
         database=database,
         user=username,
         password=password
     )
-    return connection
+    return connection"""
 
 #Snowflake
 def connect_to_snowflake(account, username, password, warehouse=None, database=None, schema=None):
@@ -70,10 +69,10 @@ def connection_page():
             st.rerun()
     else:
         #Opções de banco
-        db_option = st.selectbox("Selecione o Banco de Dados", ("MySQL", "PostgreSQL", "Snowflake"))
+        db_option = st.selectbox("Selecione o Banco de Dados", ("MySQL", "Snowflake"))
 
         # Inpute pra banco
-        if db_option in ("MySQL", "PostgreSQL"):
+        if db_option in ("MySQL"):
             host = st.text_input("Host/Account")
             username = st.text_input("Nome de Usuário")
             password = st.text_input("Senha", type="password")
@@ -96,8 +95,6 @@ def connection_page():
         if st.button("Conectar ao Banco de Dados"):
             if db_option == "MySQL":
                 session.connection = connect_to_mysql(host, username, password, database)
-            elif db_option == "PostgreSQL":
-                session.connection = connect_to_postgresql(host, database, username, password)
             elif db_option == "Snowflake":
                 session.connection = connect_to_snowflake(host, username, password, warehouse, database, schema)
             st.success(f"Conectado ao Banco de Dados {db_option}")
