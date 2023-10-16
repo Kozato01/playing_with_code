@@ -1,7 +1,7 @@
 matplotlib==3.8.0
 mysql_connector_repackaged==0.3.1
 pandas==2.1.1
-psycopg2==2.9.9
+psycopg2-binary
 seaborn==0.13.0
 snowflake_connector_python==3.3.0
 streamlit==1.27.2
