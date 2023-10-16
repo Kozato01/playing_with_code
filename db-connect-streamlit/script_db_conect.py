@@ -1,5 +1,5 @@
 import streamlit as st
-import psycopg2
+import psycopg2-binary
 import mysql.connector.connection
 import snowflake.connector
 import pandas as pd
