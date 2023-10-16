@@ -1,5 +1,6 @@
 matplotlib==3.8.0
 mysql_connector_repackaged==0.3.1
+mysql-connector-python
 pandas==2.1.1
 psycopg2-binary
 seaborn==0.13.0
