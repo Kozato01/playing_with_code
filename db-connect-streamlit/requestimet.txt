@@ -1,6 +1,6 @@
-import mysql.connector
-import snowflake.connector
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-import streamlit.components.v1 as components
+mysql-connector-python==8.0.26
+snowflake-connector-python==2.6.1
+psycopg2==2.9.9
+pandas==1.3.3
+matplotlib==3.4.3
+seaborn==0.11.2
