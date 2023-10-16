@@ -1,0 +1,14 @@
+# Conexão a Bancos de Dados e Consultas SQL com Streamlit
+Este repositório contém um projeto básico que utiliza o Streamlit para estabelecer conexões com três tipos diferentes de bancos de dados: MySQL, PostgreSQL e Snowflake. Você pode inserir consultas SQL e visualizar os resultados diretamente na interface. Além disso, é possível criar gráficos simples para representar os dados.
+
+### Recursos Principais:
+- Conexão a três tipos de banco de dados populares.
+- Interface para inserir e executar consultas SQL.
+- Visualização de resultados em forma de tabelas.
+- Criação de gráficos de barras, gráficos de pizza e outros.
+- Interface para construir um dashboard básico.
+
+Este projeto foi desenvolvido em Python e usa Streamlit para criar uma interface amigável e acessível. É um ponto de partida simples para quem deseja explorar a conexão a bancos de dados e a execução de consultas SQL com facilidade.
+Sinta-se à vontade para clonar e explorar o código-fonte para entender como tudo funciona e começar a usar em seus próprios projetos.
+**Nota:** Lembre-se de configurar suas credenciais de banco de dados no código antes de utilizar.
+
