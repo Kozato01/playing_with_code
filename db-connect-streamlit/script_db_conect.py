@@ -1,11 +1,16 @@
 import streamlit as st
-#import psycopg2
+import psycopg2
 import mysql.connector.connection
 import snowflake.connector
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-import streamlit.components.v1 as components
+
+try:
+    from httpcore import CloseError
+except ImportError:
+    class CloseError:
+        pass
 
 #MySQL
 def connect_to_mysql(host, username, password, database):
@@ -17,15 +22,15 @@ def connect_to_mysql(host, username, password, database):
     )
     return connection
 
-#PostgreSQL - Houve um bug.
-"""def connect_to_postgresql(host, database, username, password):
+#PostgreSQL
+def connect_to_postgresql(host, database, username, password):
     connection = psycopg2.connect(
         host=host,
         database=database,
         user=username,
         password=password
     )
-    return connection """
+    return connection
 
 #Snowflake
 def connect_to_snowflake(account, username, password, warehouse=None, database=None, schema=None):
@@ -65,10 +70,10 @@ def connection_page():
             st.rerun()
     else:
         #Opções de banco
-        db_option = st.selectbox("Selecione o Banco de Dados", ("MySQL", "Snowflake"))
+        db_option = st.selectbox("Selecione o Banco de Dados", ("MySQL", "PostgreSQL", "Snowflake"))
 
         # Inpute pra banco
-        if db_option in ("MySQL"):
+        if db_option in ("MySQL", "PostgreSQL"):
             host = st.text_input("Host/Account")
             username = st.text_input("Nome de Usuário")
             password = st.text_input("Senha", type="password")
