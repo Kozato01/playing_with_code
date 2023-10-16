@@ -1,5 +1,5 @@
 import streamlit as st
-import mysql.connector.connection
+#import mysql.connector.connection
 import snowflake.connector
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -12,6 +12,7 @@ except ImportError:
         pass
 
 #MySQL
+"""
 def connect_to_mysql(host, username, password, database):
     connection = mysql.connector.connect(
         host=host,
@@ -19,7 +20,7 @@ def connect_to_mysql(host, username, password, database):
         password=password,
         database=database
     )
-    return connection
+    return connection """
 
 #PostgreSQL
 """def connect_to_postgresql(host, database, username, password):
@@ -69,16 +70,10 @@ def connection_page():
             st.rerun()
     else:
         #Opções de banco
-        db_option = st.selectbox("Selecione o Banco de Dados", ("MySQL", "Snowflake"))
+        db_option = st.selectbox("Selecione o Banco de Dados", ("Snowflake"))
 
         # Inpute pra banco
-        if db_option in ("MySQL"):
-            host = st.text_input("Host/Account")
-            username = st.text_input("Nome de Usuário")
-            password = st.text_input("Senha", type="password")
-            database = st.text_input("Nome do Banco de Dados")
-            warehouse = schema = None
-        elif db_option == "Snowflake":
+        if db_option == "Snowflake":
             host = st.text_input("Host/Account")
             username = st.text_input("Nome de Usuário")
             password = st.text_input("Senha", type="password")
@@ -93,9 +88,7 @@ def connection_page():
             host = username = password = database = warehouse = schema = None
 
         if st.button("Conectar ao Banco de Dados"):
-            if db_option == "MySQL":
-                session.connection = connect_to_mysql(host, username, password, database)
-            elif db_option == "Snowflake":
+            if db_option == "Snowflake":
                 session.connection = connect_to_snowflake(host, username, password, warehouse, database, schema)
             st.success(f"Conectado ao Banco de Dados {db_option}")
             st.rerun()
