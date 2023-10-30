@@ -23,4 +23,4 @@ jobs:
           password: ${{secrets.DOCKER_PAT}}
 
       - name: Docker Push
-        run: docker push ${{secrets.DOCKERHUB_USERNAME}}/githubkozato
+        run: docker push ${{secrets.DOCKERHUB_USERNAME}}/githubkozato:streamlitwebdblink:latest
