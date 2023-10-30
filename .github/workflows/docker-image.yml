@@ -11,18 +11,23 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
-      - name: Push to Docker Hub
-        uses: docker/build-push-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PAT }}
-          repository: kozato/githubkozato
-          tags: latest, ${{ github.run_number }}
+      - name: Docker Login
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PAT }}
+        run: |
+          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
       - name: Build the Docker image
-        run: docker build -t streamlitwebdblink:latest -f db-connect-streamlit/Dockerfile .
+        run: docker build -t myapp:latest -f db-connect-streamlit/Dockerfile .
 
-      #- name: Push Docker image
-      #  run: docker push kozato/streamlitwebdblink:latest
+      - name: Generate Random Image Tag
+        id: generate_tag
+        run: echo "::set-output name=TAG::$(date +%s)"
+
+      - name: Push Docker image
+        run: |
+          docker tag myapp:latest $DOCKER_USERNAME/myapp:${{ steps.generate_tag.outputs.TAG }}
+          docker push $DOCKER_USERNAME/myapp:${{ steps.generate_tag.outputs.TAG }}
