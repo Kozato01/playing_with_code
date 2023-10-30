@@ -5,7 +5,7 @@ FROM python:3.8
 WORKDIR /app
 
 # Copie o arquivo de requisitos (se houver)
-COPY requirements.txt .
+COPY db-connect-streamlit/requirements.txt .
 
 # Instale as dependências do aplicativo
 RUN pip install -r requirements.txt
