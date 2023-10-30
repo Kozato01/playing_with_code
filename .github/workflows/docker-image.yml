@@ -14,7 +14,8 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build Docker image
-        run: docker build -t minha-aplicacao-streamlit:latest .
+        run: docker build -t minha-aplicacao-streamlit:latest -f db-connect-streamlit/Dockerfile .
+
 
       - name: Push Docker image
         run: |
