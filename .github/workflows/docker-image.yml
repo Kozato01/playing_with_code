@@ -27,8 +27,7 @@ jobs:
       - name: Build and push Docker image
         run: |
           docker buildx create --use
-          docker buildx build -t kozato/streamlitwebapp:latest -f Dockerfile .
-          docker push kozato/streamlitwebapp:latest
+          docker buildx build -t kozato/streamlitwebapp:latest -f db-connect-streamlit/Dockerfile .
         env:
           DOCKER_CLI: docker
 
