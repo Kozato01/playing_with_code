@@ -26,5 +26,6 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
+          file: .playing_with_code/db-connect-streamlit/.Dockerfile
           push: true
           tags: user/app:latest
