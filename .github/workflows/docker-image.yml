@@ -24,4 +24,4 @@ jobs:
         run: docker build -t streamlitwebdblink:latest -f db-connect-streamlit/Dockerfile .
 
       - name: Push Docker image
-        run: docker push kozato/githubkozato:streamlitwebdblink
+        run: docker push streamlitwebdblink:latest
