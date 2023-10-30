@@ -17,7 +17,7 @@ jobs:
         run: docker build -t minha-aplicacao-streamlit:latest -f db-connect-streamlit/Dockerfile .
 
 
-      - name: Log in to Docker Hub with PAT
+      - name: login docker
         run: |
           echo ${{ secrets.DOCKER_PAT }} | docker login -u kozato --password-stdin
           docker push minha-aplicacao-streamlit:latest
