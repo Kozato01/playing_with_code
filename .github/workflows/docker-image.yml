@@ -23,5 +23,5 @@ jobs:
       - name: Build the Docker image
         run: docker build -t streamlitwebdblink:latest -f db-connect-streamlit/Dockerfile .
 
-      - name: Push Docker image
-        run: docker push streamlitwebdblink:latest
+     # - name: Push Docker image
+     #   run: docker push streamlitwebdblink:latest
