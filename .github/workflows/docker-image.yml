@@ -1,33 +1,29 @@
-name: Build and Publish Docker Image
+name: ci
 
 on:
   push:
     branches:
-      - main
+      - 'main'
 
 jobs:
-  build:
+  docker:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Docker Login
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PAT }}
-        run: |
-          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-
-      - name: Build the Docker image
-        run: docker build -t myapp:latest -f db-connect-streamlit/Dockerfile .
-
-      - name: Generate Random Image Tag
-        id: generate_tag
-        run: echo "::set-output name=TAG::$(date +%s)"
-
-      - name: Push Docker image
-        run: |
-          docker tag myapp:latest $DOCKER_USERNAME/myapp:${{ steps.generate_tag.outputs.TAG }}
-          docker push $DOCKER_USERNAME/myapp:${{ steps.generate_tag.outputs.TAG }}
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      -
+        name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          tags: user/app:latest
