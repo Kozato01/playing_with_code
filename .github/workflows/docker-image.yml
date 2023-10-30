@@ -30,4 +30,4 @@ jobs:
       - name: Push Docker image
         run: |
           docker tag myapp:latest $DOCKER_USERNAME/myapp:${{ steps.generate_tag.outputs.TAG }}
-          docker push $DOCKER_USERNAME/myapp:${{ steps.generate_tag.outputs.TAG }}
+          docker push $DOCKER_USERNAME/streamlitweb:${{ steps.generate_tag.outputs.TAG }}
