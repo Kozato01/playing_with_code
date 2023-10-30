@@ -6,3 +6,4 @@ psycopg2-binary==2.9.1
 seaborn==0.13.0
 snowflake-connector-python==3.3.0
 streamlit==1.27.2
+#libs
