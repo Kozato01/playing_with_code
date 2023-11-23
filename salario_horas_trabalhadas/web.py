@@ -1,6 +1,7 @@
 import streamlit as st
 import streamlit.components.v1 as components
 import datetime
+import pandas as pd
 import holidays
 
 #Função principal para calcular as horas de trabalho.
@@ -49,17 +50,6 @@ def calcular_salario_com_valor_fixo(horas_trabalhadas, taxa_horaria, valor_fixo,
 
     return salario
 
-#counter page
-def viewspages():
-    try:
-        with open("counter.txt", "r") as file:
-            count = int(file.read())
-    except FileNotFoundError:
-        count = 0
-    count += 1
-    with open("counter.txt", "w") as file:
-        file.write(str(count))
-    return count
 
 
 #Visual da Pagina
@@ -142,46 +132,62 @@ def borda_infinita(gif_url, border_height):
     st.markdown(html_content, unsafe_allow_html=True)
 
 
-#Função de execução.
 def main():
     set_app_style()
-    #count = viewspages()
-    #st.markdown(f'<div class="counter-container">Views: {count}  <img src="https://media2.giphy.com/media/69IXObwFH221tvWgz1/giphy.gif?cid=ecf05e470l46rlrwccrxjo7nfs88hafpud8vvtfqes0lc9iy&ep=v1_gifs_related&rid=giphy.gif&ct=s" width="35"> </div>', unsafe_allow_html=True)
-
-    #Titulo
+    
     st.markdown("# Calculadora de Salário Mensal <img src='https://3.bp.blogspot.com/-KIZ9p-k2cdI/WvRiMSwk7BI/AAAAAAAA7DQ/TXiSbwbbQUQqGROhg5vsi4y7-JdKFBxpgCLcBGAs/s1600/i%2Bbelieve%2Bi%2Bcan%2Bfly%2BI%2BBELIEVE%2BI%2BCAN%2BTOUCH%2BSKY.gif' width='50'>", unsafe_allow_html=True)
 
     message = st.chat_message("assistant", avatar="🧑‍💻")
     message.write("Bem-vindo ao nosso Calculador de Salário! Aqui, simplificamos o processo de entender o seu rendimento. Seja você um profissional CLT ou PJ, nosso site oferece uma maneira fácil e rápida de calcular seu salário líquido, levando em consideração impostos e DAS. Otimize suas finanças de forma inteligente. Experimente agora!")
-    mes = st.number_input("Digite o número do mês (1-12):", min_value=1, max_value=12, value=datetime.datetime.today().month)
-    ano = st.toggle("Deseja escolher o ano?", help='Estamos usando o ano atual, caso deseje utilizar outro ano, marque a opção abaixo.' )
-    if ano:
-        ano = st.number_input("Digite o ano:", min_value=1900, max_value=2100, value=datetime.datetime.today().year)
-    else:
-        ano = datetime.datetime.today().year
 
+    # Configuração de mês e ano
+    col1, col2 = st.columns(2)
+    mes = col1.number_input("Digite o número do mês (1-12):", min_value=1, max_value=12, value=datetime.datetime.today().month)
+    ano = col2.number_input("Digite o ano:", min_value=1900, max_value=2100, value=datetime.datetime.today().year) if st.toggle("Deseja escolher o ano?", help='Estamos usando o ano atual, caso deseje utilizar outro ano, marque a opção abaixo.') else datetime.datetime.today().year
+    
+    # Opção para escolher dias úteis manualmente
+    opcao_calculo_dias = st.checkbox("Escolher dias úteis manualmente", value=False, help="Marque para inserir manualmente o número de dias úteis trabalhado.")
+    
+    if opcao_calculo_dias:
+        num_dias_uteis_manual = st.number_input("Número de dias úteis de trabalho no mês (opcional):", min_value=0, max_value=31, value=0)
+        num_dias_uteis = num_dias_uteis_manual
+        st.warning("Você escolheu inserir manualmente o número de dias úteis.")
+    else:
+        num_dias_uteis = calcular_horas_trabalho_mes(mes, ano)[1]
+
+    # Método de cálculo do salário
     metodo_calculo = st.radio("Escolha o tipo:", ["Por Hora", "Valor Fixo"], help='Escolha o tipo de pagamento que você recebe') 
     valor_fixo, taxa_horaria = 0, 0
     if metodo_calculo == "Por Hora":
         taxa_horaria = st.number_input("Digite sua taxa horária:", min_value=0.0, value=0.0)
     else:
         valor_fixo = st.number_input("Digite o valor fixo:", min_value=0.0, value=0.0)
-        
 
-    horas_trabalho_mes, num_dias_uteis = calcular_horas_trabalho_mes(mes, ano)
+    # Cálculo das horas de trabalho
+    horas_trabalho_mes, _ = calcular_horas_trabalho_mes(mes, ano)
+    horas_trabalho_mes = num_dias_uteis * 8  # Atualiza as horas de trabalho com base nos dias úteis inseridos
+
     if horas_trabalho_mes == 0:
         st.warning("Mês inválido. Verifique o número do mês.")
         return
-        
+
+    # Opções de imposto e DAS
     imposto_escolha = st.toggle("Incluir imposto?", value=False)
     DAS_escolha = st.toggle("Incluir DAS?", value=False)
-    porcentagem = st.number_input("Digite a porcentagem do imposto:", min_value=0, max_value=100, value=6) if imposto_escolha else 0
+
+    if imposto_escolha:
+        porcentagem = st.number_input("Porcentagem do imposto (%)", min_value=0, max_value=100, value=6)
+    else:
+        porcentagem = 0
+
     valor_das = 71 if DAS_escolha else 0
 
+    # Cálculo do salário
     salario_mensal = calcular_salario_com_valor_fixo(horas_trabalho_mes, taxa_horaria, valor_fixo, metodo_calculo)
     imposto_calculado = (salario_mensal * (porcentagem/100)) + valor_das 
     salario_liquido = salario_mensal - imposto_calculado
 
+    # Apresentação dos resultados
     st.write("Número de dias úteis de trabalho no mês:", num_dias_uteis)
     st.write("Número de horas de trabalho no mês:", horas_trabalho_mes)
     st.write("Salário mensal bruto estimado: R$", salario_mensal)
@@ -189,45 +195,63 @@ def main():
     salario_final = salario_mensal
     if imposto_escolha or DAS_escolha:
         st.write("Valor do imposto: R$", imposto_calculado)
-        st.write("Salário mensal liquido estimado: R$", salario_liquido)
+        st.write("Salário mensal líquido estimado: R$", salario_liquido)
         salario_final = salario_liquido
    
-    st.write('-'*15)
-    st.write('Recomendação de divisão do salário.')
-    st.write(f'Despesas Básicas: R$ {(salario_final * 0.60):.2f}')
-    st.write(f'Poupança e Investimentos: R$ {(salario_final * 0.20):.2f}')
-    st.write(f'Gastos Pessoais: R$ {(salario_final * 0.20):.2f}')
+    # Mostrar ou ocultar a recomendação de divisão do salário
+    mostrar_recomendacao = st.checkbox("Mostrar Recomendação de divisão do salário", value=False)
+    
+    if mostrar_recomendacao:
+        st.write('-'*15)
+        st.write('Recomendação de divisão do salário:')
+        
+        # Dados para a tabela
+        percentual_despesas = st.slider("Percentual para Despesas Básicas (%)", min_value=0, max_value=100, value=60)
+        percentual_poupanca = st.slider("Percentual para Poupança e Investimentos (%)", min_value=0, max_value=100, value=20)
+        percentual_gastos_pessoais = 100 - percentual_despesas - percentual_poupanca
+            
+        dados_tabela = {
+            'Categoria': ['Despesas Básicas', 'Poupança e Investimentos', 'Gastos Pessoais'],
+            'Percentual': [f'{percentual_despesas}%', f'{percentual_poupanca}%', f'{percentual_gastos_pessoais}%'],
+            'Valor (R$)': [f'R$ {(salario_final * percentual_despesas/100):.2f}', f'R$ {(salario_final * percentual_poupanca/100):.2f}', f'R$ {(salario_final * percentual_gastos_pessoais/100):.2f}']
+        }
+
+        if imposto_escolha:
+            valor_imposto = salario_final * porcentagem / 100
+            dados_tabela['Categoria'].append('Imposto')
+            dados_tabela['Percentual'].append(f'{porcentagem}%')
+            dados_tabela['Valor (R$)'].append(f'R$ {valor_imposto:.2f}')
+
+        if DAS_escolha:
+            dados_tabela['Categoria'].append('DAS')
+            dados_tabela['Percentual'].append('Fixo')
+            dados_tabela['Valor (R$)'].append(f'R$ {valor_das:.2f}')
+
+        # Adiciona uma linha para a soma dos valores na tabela
+        soma_valores = salario_final * percentual_despesas/100 + salario_final * percentual_poupanca/100 + salario_final * percentual_gastos_pessoais/100
+        
+        dados_tabela['Categoria'].append('Valor Final ')
+        dados_tabela['Percentual'].append('--------')
+        dados_tabela['Valor (R$)'].append(f'R$ {soma_valores:.2f}')
+
+        # Cria o DataFrame
+        df_tabela = pd.DataFrame(dados_tabela)
+
+        # Define estilos para a tabela
+        styles = [
+            dict(selector="th", props=[("font-size", "110%"), ("text-align", "center"), ("background-color", "#824caf"), ("color", "white")]),
+            dict(selector="td", props=[("font-size", "100%"), ("text-align", "center"), ("background-color", "#f2f2f2"), ("color", "black")]),
+            dict(selector="tr:hover", props=[("background-color", "#e0e0e0")]),
+            dict(selector="td, th", props=[("border", "2px solid #0c0c12")]),
+            dict(selector="table", props=[("border-collapse", "collapse"), ("width", "100%")]),
+            dict(selector="caption", props=[("caption-side", "bottom")])
+        ]
+        # Exibe a tabela com estilos personalizados
+        st.table(df_tabela.style.set_table_styles(styles))
 
     add_linked_in_icon()
-    #css especificos da page.
-    html_custom_contador = """
-    <style>
-    .counter-container {
-        display: flex;
-        justify-content: flex-end;
-        align-items: flex-start;
-        font-size: 25px;
-        font-weight: bold;
-        margin-top: -40px;
-        margin-right: -200px;
-        color: #000000; /* Cor do texto: preto */
-        background: linear-gradient(45deg, #ff5733, #ffbd33);
-        background-attachment: fixed;
-        background-size: auto;
-        background-clip: text; /* Aplica o gradiente apenas ao texto */
-        -webkit-background-clip: text; /* Necessário para navegadores baseados em Webkit, como Chrome e Safari */
-        text-fill-color: transparent; /* Torna a cor do texto transparente */
-        -webkit-text-stroke: 0.2px #ff5733; /* Contorno de texto: espessura e cor laranja */
-        text-stroke: 1px #ff5733;
-    }
-    </style>
-    """
-
-
-    st.markdown(html_custom_contador, unsafe_allow_html=True)
-
-    #feactures de texto
-    #radio horizontal
+    # Features de texto
+    # Radio horizontal
     st.write('<style>div.row-widget.stRadio > div{flex-direction:row;justify-content: center;} </style>', unsafe_allow_html=True)
     borda_infinita("https://i.pinimg.com/originals/61/f9/51/61f951ee6770732cba132c4b89c316b5.gif", 50)
 
